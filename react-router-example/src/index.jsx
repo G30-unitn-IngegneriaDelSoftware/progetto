@@ -11,7 +11,7 @@ import {
 import "./index.css";
 import Register from "./pages/Register";
 import Account from "./pages/Accunt";
-import Appartamento from "./pages/Appartamento";
+import Appartamento from "./Layouts/Appartamento";
 import Bacheca from "./pages/Bacheca";
 import Calendario from "./pages/Calendario";
 import Login from "./pages/Login";
@@ -19,12 +19,12 @@ import Spese from "./pages/Spese";
 import ToDo from "./pages/Todo";
 import Turni from "./pages/Turni";
 import Appartamenti from "./pages/Appartamenti";
-import Layout from "./Layouts/Layout";
 import Principale from "./pages/Principale";
+import "./index.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+    <Route path="/">
       <Route
         index
         element={<Appartamenti />}

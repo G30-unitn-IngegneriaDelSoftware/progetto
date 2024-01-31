@@ -8,8 +8,16 @@ import { useNavigate, redirect, Form } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
-  return (
-    <Container
+  return (    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+          <Container
       style={{
         display: "flex",
         alignItems: "center",
@@ -174,5 +182,6 @@ export default function Register() {
         </Grid>
       </Container>
     </Container>
-  );
+    </div>);
+
 }
