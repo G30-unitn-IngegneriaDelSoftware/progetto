@@ -54,6 +54,14 @@ export default function Appartamenti() {
             justifyContent="center"
             alignItems="center"
             sx={{ flexGrow: 1 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "95%",
+              width: "95%",
+              backgroundColor: "rgb(103, 131,53)",
+            }}
           >
             <Grid
               container
@@ -63,8 +71,9 @@ export default function Appartamenti() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "90vh",
-                width: "35vw",
+                height: "100%",
+                width: "49%",
+                //backgroundColor: "rgb(103, 131,53)",
               }}
             >
               <Grid
@@ -367,8 +376,9 @@ export default function Appartamenti() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "90vh",
-                width: "35vw",
+                height: "100%",
+                width: "49%",
+                backgroundColor: "rgb(203, 31,53)",
               }}
             >
               <Grid
