@@ -60,7 +60,7 @@ export default function Appartamenti() {
               justifyContent: "center",
               height: "95%",
               width: "95%",
-              backgroundColor: "rgb(103, 131,53)",
+              //backgroundColor: "rgb(103, 131,53)",
             }}
           >
             <Grid
@@ -378,7 +378,7 @@ export default function Appartamenti() {
                 justifyContent: "center",
                 height: "100%",
                 width: "49%",
-                backgroundColor: "rgb(203, 31,53)",
+                //backgroundColor: "rgb(203, 31,53)",
               }}
             >
               <Grid
