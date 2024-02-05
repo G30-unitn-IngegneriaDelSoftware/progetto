@@ -29,7 +29,7 @@ const router = createBrowserRouter(
         index
         element={<Appartamenti />}
         loader={async () => {
-          const isLoggedIn = true;
+          const isLoggedIn = false;
           if (!isLoggedIn) {
             console.log("andiamo");
             throw redirect("/login");
