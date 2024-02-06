@@ -1,4 +1,5 @@
 import React from "react";
+import { CookiesProvider } from "react-cookie";
 import ReactDOM from "react-dom/client";
 import {
   RouterProvider,
@@ -21,6 +22,9 @@ import Turni from "./pages/Turni";
 import Appartamenti from "./pages/Appartamenti";
 import Principale from "./pages/Principale";
 import "./index.css";
+import { requireAuth } from "./utilis.jsx";
+/*import axios from "axios";
+axios.defaults.withCredentials = true;*/
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,15 +32,7 @@ const router = createBrowserRouter(
       <Route
         index
         element={<Appartamenti />}
-        loader={async () => {
-          const isLoggedIn = false;
-          if (!isLoggedIn) {
-            console.log("andiamo");
-            throw redirect("/login");
-          }
-          console.log("f");
-          return null;
-        }}
+        loader={async () => await requireAuth()}
       />
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
@@ -57,4 +53,8 @@ function App() {
   return <RouterProvider router={router} />;
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <CookiesProvider>
+    <App />
+  </CookiesProvider>
+);

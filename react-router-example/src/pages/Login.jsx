@@ -5,8 +5,23 @@ import Grid from "@mui/joy/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/joy/Button";
 import { useNavigate, redirect, Form } from "react-router-dom";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+//axios.defaults.withCredentials = true;
+
+async function tryLogin() {
+  axios
+    .post("http://localhost:3002/login", {
+      username: "username",
+      password: "password",
+    })
+    .then((response) => {
+      console.log(response);
+    });
+}
 
 export default function Login() {
+  const [cookies, setCookie] = useCookies(["session"]);
   const navigate = useNavigate();
   return (
     <div
@@ -119,7 +134,12 @@ export default function Login() {
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={() => {
-                    navigate("/register", { replace: true });
+                    axios
+                      .get("http://localhost:3002/users", {})
+                      .then((response) => {
+                        console.log(response);
+                      });
+                    //navigate("/register", { replace: true });
                   }}
                 >
                   Sign Up
@@ -129,7 +149,8 @@ export default function Login() {
                 <Button
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
-                  onClick={() => {
+                  onClick={async () => {
+                    await tryLogin();
                     navigate("/", { replace: true });
                   }}
                 >

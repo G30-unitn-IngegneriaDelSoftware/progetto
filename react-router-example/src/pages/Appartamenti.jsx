@@ -15,9 +15,44 @@ import ModeIcon from "@mui/icons-material/Mode";
 import ClearIcon from "@mui/icons-material/Clear";
 import PersonIcon from "@mui/icons-material/Person";
 import ButtonBase from "@mui/material/ButtonBase";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+//axios.defaults.withCredentials = true;
+
+async function tryLogin() {
+  axios
+    .post("http://localhost:3002/login", {
+      username: "username",
+      password: "password",
+    })
+    .then((response) => {
+      console.log(response);
+    });
+}
+
+async function creaAppartamento() {
+  axios
+    .post("http://localhost:3002/apartments", {
+      name: "appartamento",
+      description: "descrizione",
+      admin: "username",
+      users: ["username"],
+      expanses: [],
+    })
+    .then((response) => {
+      console.log(response);
+    });
+}
+async function getMyApartmenst() {
+  axios.get("http://localhost:3002/apartments").then((response) => {
+    console.log(response);
+  });
+}
 
 export default function Appartamenti() {
   const navigate = useNavigate();
+  getMyApartmenst();
+
   return (
     <div
       style={{
@@ -417,8 +452,9 @@ export default function Appartamenti() {
                   <Button
                     variant="solid"
                     style={{ background: "rgb(0, 76, 134)" }}
-                    onClick={() => {
-                      console.log("hola");
+                    onClick={async () => {
+                      await creaAppartamento();
+                      console.log(localStorage.getItem("loggedin"));
                     }}
                   >
                     Crea nuovo appartamento
