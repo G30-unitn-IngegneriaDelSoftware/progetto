@@ -7,13 +7,12 @@ import Button from "@mui/joy/Button";
 import { useNavigate, redirect, Form } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-//axios.defaults.withCredentials = true;
 
 async function tryLogin() {
   axios
     .post("http://localhost:3002/login", {
-      username: "username",
-      password: "password",
+      username: "username2",
+      password: "password2",
     })
     .then((response) => {
       console.log(response);
@@ -21,8 +20,27 @@ async function tryLogin() {
 }
 
 export default function Login() {
-  const [cookies, setCookie] = useCookies(["session"]);
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies();
+  console.log(cookies);
+  
+  React.useEffect(() => {
+    let sessioneTrovata = false;
+    for (const chiave in cookies) {
+      // Verifica se la chiave è "session" e se il suo valore ha una lunghezza maggiore di 1
+      if (chiave === "session" && cookies[chiave].length > 1) {
+        sessioneTrovata = true;
+        break; // Esci dal ciclo una volta trovato un valore valido
+      }
+    }
+    if (sessioneTrovata) {
+      console.log("esisto");
+      navigate("/appartamenti", { replace: true });
+    } else {
+      console.log("non esisto");
+    }
+  }, [cookies]); // <- add the count variable here
+
   return (
     <div
       style={{
@@ -134,12 +152,7 @@ export default function Login() {
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={() => {
-                    axios
-                      .get("http://localhost:3002/users", {})
-                      .then((response) => {
-                        console.log(response);
-                      });
-                    //navigate("/register", { replace: true });
+                    navigate("/register", { replace: true });
                   }}
                 >
                   Sign Up
@@ -151,7 +164,7 @@ export default function Login() {
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={async () => {
                     await tryLogin();
-                    navigate("/", { replace: true });
+                    navigate("/appartamenti", { replace: true });
                   }}
                 >
                   Sign In

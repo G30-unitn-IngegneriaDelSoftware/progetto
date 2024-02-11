@@ -1,5 +1,6 @@
 import React from "react";
 import { CookiesProvider } from "react-cookie";
+import { withCookies } from "react-cookie";
 import ReactDOM from "react-dom/client";
 import {
   RouterProvider,
@@ -22,20 +23,16 @@ import Turni from "./pages/Turni";
 import Appartamenti from "./pages/Appartamenti";
 import Principale from "./pages/Principale";
 import "./index.css";
-import { requireAuth } from "./utilis.jsx";
-/*import axios from "axios";
-axios.defaults.withCredentials = true;*/
+import axios from "axios";
+import { useCookies } from "react-cookie";
+axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route
-        index
-        element={<Appartamenti />}
-        loader={async () => await requireAuth()}
-      />
+      <Route index element={<Login />} />
       <Route path="register" element={<Register />} />
-      <Route path="login" element={<Login />} />
+      <Route path="appartamenti" element={<Appartamenti />} />
       <Route path="appartamento" element={<Appartamento />}>
         <Route index element={<Principale />} />
         <Route path="bacheca" element={<Bacheca />} />

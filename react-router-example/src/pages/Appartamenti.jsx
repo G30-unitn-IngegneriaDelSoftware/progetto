@@ -18,22 +18,10 @@ import ButtonBase from "@mui/material/ButtonBase";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 //axios.defaults.withCredentials = true;
-
-async function tryLogin() {
-  axios
-    .post("http://localhost:3002/login", {
-      username: "username",
-      password: "password",
-    })
-    .then((response) => {
-      console.log(response);
-    });
-}
-
 async function creaAppartamento() {
   axios
     .post("http://localhost:3002/apartments", {
-      name: "appartamento",
+      name: "appartamento2",
       description: "descrizione",
       admin: "username",
       users: ["username"],
@@ -41,17 +29,69 @@ async function creaAppartamento() {
     })
     .then((response) => {
       console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
     });
 }
-async function getMyApartmenst() {
-  axios.get("http://localhost:3002/apartments").then((response) => {
-    console.log(response);
-  });
+async function agggiungiAppartamento(id) {
+  // Ora puoi usare id nella tua funzione
+  console.log("link");
+  console.log("http://localhost:3002/apartments/" + id + "/members");
+  axios
+    .post("http://localhost:3002/apartments/" + id + "/members")
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  // Esegui il resto del codice per aggiungere l'appartamento
 }
 
 export default function Appartamenti() {
+  const [cookies, setCookie] = useCookies(["session"]);
   const navigate = useNavigate();
-  getMyApartmenst();
+  const [apartments, setApartmenst] = React.useState([]);
+  const [render, setRender] = React.useState(false);
+  const [appartmentID, setAppartmentID] = React.useState("");
+  const [appCookies, setAppCookie] = useCookies(["apartment_id"]);
+
+  const handleAppartmentIDChange = (event) => {
+    setAppartmentID(event.target.value);
+  };
+
+  React.useEffect(() => {
+    let sessioneTrovata = false;
+    for (const chiave in cookies) {
+      // Verifica se la chiave è "session" e se il suo valore ha una lunghezza maggiore di 1
+      if (chiave === "session" && cookies[chiave].length > 1) {
+        sessioneTrovata = true;
+        break; // Esci dal ciclo una volta trovato un valore valido
+      }
+    }
+    if (!sessioneTrovata) {
+      navigate("/", { replace: true });
+    }
+  }, [cookies]);
+
+  React.useEffect(() => {
+    console.log("appcookies");
+    console.log(appCookies);
+  }, []);
+
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:3002/apartments")
+      .then((response) => {
+        console.log(response);
+        setApartmenst(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [render]);
+  console.log(apartments);
 
   return (
     <div
@@ -133,265 +173,245 @@ export default function Appartamenti() {
                   overflow: "auto",
                 }}
               >
-                <ButtonBase
-                  style={{
-                    height: "35%",
-                    width: "100%",
-                    marginTop: "10px",
-                    //backgroundColor: "rgb(72, 19, 155)",
-                  }}
-                  onClick={() => navigate("/appartamento")}
-                >
-                  <Grid
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      backgroundColor: "rgb(172, 219, 255)",
-                    }}
-                  >
-                    <Grid
-                      container
-                      direction="column"
-                      alignItems="center"
+                {apartments.length > 0 &&
+                  apartments.map((apartment, index) => (
+                    <ButtonBase
+                      key={index}
                       style={{
-                        height: "100%",
+                        height: "35%",
                         width: "100%",
-                        //backgroundColor: "rgb(13, 231, 93)",
+                        marginTop: "10px",
+                        //backgroundColor: "rgb(72, 19, 155)",
+                      }}
+                      onClick={async () => {
+                        console.log("apartment._id");
+                        console.log(apartment._id);
+                        setAppCookie("apartment_id", apartment._id);
+                        navigate("/appartamento");
                       }}
                     >
                       <Grid
-                        container
-                        direction="row"
                         style={{
-                          height: "45%",
+                          height: "100%",
                           width: "100%",
-                          //backgroundColor: "rgb(13, 231, 93)",
+                          backgroundColor: "rgb(172, 219, 255)",
                         }}
                       >
                         <Grid
                           container
-                          style={{
-                            height: "100%",
-                            width: "20%",
-                            //backgroundColor: "rgb(83, 51, 33)",
-                          }}
-                        >
-                          <Grid
-                            sx={{
-                              height: "100%",
-                              width: "80%",
-                              borderRadius: "50%",
-                              border: "1px solid black",
-                            }}
-                          />
-                        </Grid>
-                        <Grid
-                          container
-                          style={{
-                            height: "100%",
-                            width: "2%",
-                            //backgroundColor: "rgb(83, 91, 153)",
-                          }}
-                        ></Grid>
-
-                        <Grid
-                          container
                           direction="column"
-                          justifyContent="flex-start"
-                          style={{
-                            height: "100%",
-                            width: "58%",
-                            //backgroundColor: "rgb(133, 191, 153)",
-                          }}
-                        >
-                          <Typography
-                            style={{
-                              height: "70%",
-                              width: "100%",
-                              //backgroundColor: "rgb(83, 71, 153)",
-                              fontSize: "200%",
-                            }}
-                          >
-                            Appartamento 1
-                          </Typography>
-                          <Typography
-                            style={{
-                              height: "30%",
-                              width: "100%",
-                              //backgroundColor: "rgb(13, 11, 153)",
-                            }}
-                          >
-                            Codice:12345
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          container
-                          direction="column"
-                          style={{
-                            height: "100%",
-                            width: "20%",
-                            //backgroundColor: "rgb(103, 11, 153)",
-                          }}
-                        >
-                          <Grid
-                            container
-                            justifyContent="flex-end"
-                            style={{
-                              height: "40%",
-                              width: "100%",
-                              //backgroundColor: "rgb(43, 111, 113)",
-                            }}
-                          >
-                            <ShareIcon
-                              sx={{
-                                borderRadius: "50%",
-                                border: "1px solid black",
-                                //backgroundColor: "rgb(43, 111, 113)",
-                              }}
-                            ></ShareIcon>
-                            <ModeIcon
-                              sx={{
-                                borderRadius: "50%",
-                                border: "1px solid black",
-                                //backgroundColor: "rgb(43, 111, 113)",
-                              }}
-                            ></ModeIcon>
-                            <ClearIcon
-                              sx={{
-                                borderRadius: "50%",
-                                border: "1px solid black",
-                                //backgroundColor: "rgb(43, 111, 113)",
-                              }}
-                            ></ClearIcon>
-                          </Grid>
-                          <Grid
-                            style={{
-                              height: "60%",
-                              width: "100%",
-                              //backgroundColor: "rgb(73, 11, 153)",
-                            }}
-                          ></Grid>
-                        </Grid>
-                      </Grid>
-                      <Grid
-                        container
-                        style={{
-                          height: "55%",
-                          width: "100%",
-                          //backgroundColor: "rgb(3, 231, 153)",
-                        }}
-                      >
-                        <Grid
-                          container
                           alignItems="center"
                           style={{
                             height: "100%",
                             width: "100%",
-                            //backgroundColor: "rgb(3, 231, 153)",
+                            //backgroundColor: "rgb(13, 231, 93)",
                           }}
                         >
                           <Grid
                             container
                             direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
                             style={{
-                              height: "100%",
-                              width: "49%",
-                              //backgroundColor: "rgb(13, 131, 53)",
-                            }}
-                          >
-                            Nome simpatico della via
-                          </Grid>
-                          <Divider orientation="vertical" flexItem></Divider>
-                          <Grid
-                            container
-                            direction="column"
-                            alignItems="center"
-                            style={{
-                              height: "100%",
-                              width: "50%",
-                              //backgroundColor: "rgb(33, 131, 117)",
+                              height: "45%",
+                              width: "100%",
+                              //backgroundColor: "rgb(13, 231, 93)",
                             }}
                           >
                             <Grid
                               container
-                              alignItems="center"
                               style={{
-                                height: "25%",
-                                width: "100%",
-                                //backgroundColor: "rgb(133, 231, 17)",
+                                height: "100%",
+                                width: "20%",
+                                //backgroundColor: "rgb(83, 51, 33)",
                               }}
                             >
-                              Partecipanti
+                              <Grid
+                                sx={{
+                                  height: "100%",
+                                  width: "80%",
+                                  borderRadius: "50%",
+                                  border: "1px solid black",
+                                }}
+                              />
                             </Grid>
                             <Grid
                               container
-                              direction="row"
-                              justifyContent="flex-start"
-                              alignItems="center"
                               style={{
-                                overflow: "auto",
-                                height: "75%",
-                                width: "100%",
-                                //backgroundColor: "rgb(43, 51, 127)",
+                                height: "100%",
+                                width: "2%",
+                                //backgroundColor: "rgb(83, 91, 153)",
+                              }}
+                            ></Grid>
+
+                            <Grid
+                              container
+                              direction="column"
+                              justifyContent="flex-start"
+                              style={{
+                                height: "100%",
+                                width: "58%",
+                                //backgroundColor: "rgb(133, 191, 153)",
+                              }}
+                            >
+                              <Typography
+                                style={{
+                                  height: "70%",
+                                  width: "100%",
+                                  //backgroundColor: "rgb(83, 71, 153)",
+                                  fontSize: "200%",
+                                }}
+                              >
+                                {apartment.name}
+                              </Typography>
+                              <Typography
+                                style={{
+                                  height: "30%",
+                                  width: "100%",
+                                  //backgroundColor: "rgb(13, 11, 153)",
+                                }}
+                              >
+                                Codice:{apartment._id}
+                              </Typography>
+                            </Grid>
+                            <Grid
+                              container
+                              direction="column"
+                              style={{
+                                height: "100%",
+                                width: "25%",
+                                //backgroundColor: "rgb(103, 11, 153)",
                               }}
                             >
                               <Grid
                                 container
-                                direction="column"
+                                justifyContent="flex-end"
+                                style={{
+                                  height: "40%",
+                                  width: "100%",
+                                  //backgroundColor: "rgb(43, 111, 113)",
+                                }}
+                              >
+                                <ShareIcon
+                                  sx={{
+                                    borderRadius: "50%",
+                                    border: "1px solid black",
+                                    //backgroundColor: "rgb(43, 111, 113)",
+                                  }}
+                                ></ShareIcon>
+                                <ModeIcon
+                                  sx={{
+                                    borderRadius: "50%",
+                                    border: "1px solid black",
+                                    //backgroundColor: "rgb(43, 111, 113)",
+                                  }}
+                                ></ModeIcon>
+                                <ClearIcon
+                                  sx={{
+                                    borderRadius: "50%",
+                                    border: "1px solid black",
+                                    //backgroundColor: "rgb(43, 111, 113)",
+                                  }}
+                                ></ClearIcon>
+                              </Grid>
+                              <Grid
+                                style={{
+                                  height: "60%",
+                                  width: "100%",
+                                  //backgroundColor: "rgb(73, 11, 153)",
+                                }}
+                              ></Grid>
+                            </Grid>
+                          </Grid>
+                          <Grid
+                            container
+                            style={{
+                              height: "55%",
+                              width: "100%",
+                              //backgroundColor: "rgb(3, 231, 153)",
+                            }}
+                          >
+                            <Grid
+                              container
+                              alignItems="center"
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                                //backgroundColor: "rgb(3, 231, 153)",
+                              }}
+                            >
+                              <Grid
+                                container
+                                direction="row"
                                 justifyContent="flex-start"
                                 alignItems="center"
                                 style={{
-                                  marginLeft: "2%",
+                                  height: "100%",
+                                  width: "49%",
+                                  overflow: "auto",
+                                  //backgroundColor: "rgb(13, 131, 53)",
                                 }}
                               >
-                                <PersonIcon />
-                                <Typography>nome</Typography>
+                                {apartment.description}
                               </Grid>
+                              <Divider
+                                orientation="vertical"
+                                flexItem
+                              ></Divider>
                               <Grid
                                 container
                                 direction="column"
-                                justifyContent="flex-start"
                                 alignItems="center"
                                 style={{
-                                  marginLeft: "2%",
+                                  height: "100%",
+                                  width: "50%",
+                                  //backgroundColor: "rgb(33, 131, 117)",
                                 }}
                               >
-                                <PersonIcon />
-                                <Typography>nome</Typography>
-                              </Grid>
-                              <Grid
-                                container
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                style={{
-                                  marginLeft: "2%",
-                                }}
-                              >
-                                <PersonIcon />
-                                <Typography>nome</Typography>
-                              </Grid>
-                              <Grid
-                                container
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                style={{
-                                  marginLeft: "2%",
-                                }}
-                              >
-                                <PersonIcon />
-                                <Typography>nome</Typography>
+                                <Grid
+                                  container
+                                  alignItems="center"
+                                  style={{
+                                    height: "25%",
+                                    width: "100%",
+                                    //backgroundColor: "rgb(133, 231, 17)",
+                                  }}
+                                >
+                                  Partecipanti
+                                </Grid>
+                                <Grid
+                                  container
+                                  direction="row"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  style={{
+                                    overflow: "auto",
+                                    height: "75%",
+                                    width: "100%",
+                                    //backgroundColor: "rgb(43, 51, 127)",
+                                  }}
+                                >
+                                  {apartment.users.map((user, indice) => (
+                                    <Grid
+                                      key={indice}
+                                      container
+                                      direction="column"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      style={{
+                                        marginLeft: "2%",
+                                      }}
+                                    >
+                                      <PersonIcon />
+                                      <Typography>{user}</Typography>
+                                    </Grid>
+                                  ))}
+                                </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
-                  </Grid>
-                </ButtonBase>
+                    </ButtonBase>
+                  ))}
 
                 <Grid
                   style={{
@@ -453,8 +473,8 @@ export default function Appartamenti() {
                     variant="solid"
                     style={{ background: "rgb(0, 76, 134)" }}
                     onClick={async () => {
-                      await creaAppartamento();
-                      console.log(localStorage.getItem("loggedin"));
+                      creaAppartamento();
+                      setRender(!render);
                     }}
                   >
                     Crea nuovo appartamento
@@ -484,9 +504,11 @@ export default function Appartamenti() {
                     }}
                   ></Grid>
                   <TextField
-                    id="standard-basic"
+                    id="appartmentID"
                     label="Codice identificativo"
                     variant="standard"
+                    value={appartmentID}
+                    onChange={handleAppartmentIDChange}
                   />
                   <Grid
                     style={{
@@ -497,8 +519,10 @@ export default function Appartamenti() {
                   <Button
                     variant="solid"
                     style={{ background: "rgb(0, 76, 134)" }}
-                    onClick={() => {
-                      console.log("hola");
+                    onClick={async () => {
+                      await agggiungiAppartamento(appartmentID);
+                      setRender(!render);
+                      setAppartmentID("");
                     }}
                   >
                     Unisciti nuovo appartamento

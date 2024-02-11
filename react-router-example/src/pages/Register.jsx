@@ -25,6 +25,24 @@ async function tryRegister() {
       console.log(error);
     });
 }
+async function tryRegister2() {
+  axios
+    .post("http://localhost:3002/register", {
+      email: "email2@gmail.com",
+      password: "password2",
+      username: "username2",
+      firstName: "firstName2",
+      lastName: "lastname2",
+      birthDate: "2024-01-04",
+      telephone: "3349897083",
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 export default function Register() {
   const navigate = useNavigate();
@@ -182,7 +200,7 @@ export default function Register() {
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={() => {
-                    navigate("/login", { replace: true });
+                    navigate("/", { replace: true });
                   }}
                 >
                   Cancel
@@ -193,8 +211,8 @@ export default function Register() {
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={async () => {
-                    await tryRegister();
-                    navigate("/login", { replace: true });
+                    await tryRegister2();
+                    navigate("/", { replace: true });
                   }}
                 >
                   Register

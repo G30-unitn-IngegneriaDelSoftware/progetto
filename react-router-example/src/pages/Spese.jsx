@@ -1,5 +1,6 @@
 import React from "react";
 import Grid from "@mui/joy/Grid";
+import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
 import Divider from "@mui/material/Divider";
@@ -7,8 +8,70 @@ import ButtonBase from "@mui/material/ButtonBase";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ModeIcon from "@mui/icons-material/Mode";
 import ClearIcon from "@mui/icons-material/Clear";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import Modal from "./modal";
 
 export default function Spese() {
+  const [cookies, setCookie] = useCookies(["session"]);
+  const navigate = useNavigate();
+  const [spese, setSpese] = React.useState([]);
+  const [render, setRender] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [modalValue, setModalValue] = React.useState([{ username: "dio" }]);
+
+  React.useEffect(() => {
+    if (cookies && Object.keys(cookies).length > 0) {
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [cookies]);
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:3002/users")
+      .then(async (response) => {
+        await setModalValue(response.data); // Aspetta che setModalValue sia completato
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get(
+        "http://localhost:3002/apartments/" +
+          cookies["apartment_id"] +
+          "/expenses"
+      )
+      .then(async (response) => {
+        console.log("spese");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:3002/expenses")
+      .then((response) => {
+        console.log(response);
+        setSpese(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [render]);
+
+  const openModal = () => {
+    console.log("modalValuepreapertura");
+    console.log(modalValue);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Grid
       container
@@ -82,7 +145,15 @@ export default function Spese() {
                 //backgroundColor: "rgb(193, 231,153)",
               }}
             >
+              <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                value={modalValue}
+              />
               <ButtonBase
+                onClick={() => {
+                  openModal();
+                }}
                 style={{
                   height: "100%",
                   width: "15%",
@@ -201,8 +272,7 @@ export default function Spese() {
                     <Typography sx={{ fontWeight: "bold" }}>
                       Titolo spesa
                     </Typography>
-                    <Typography> Franco
-                    </Typography>
+                    <Typography> Franco</Typography>
                     <Typography> 50 euro</Typography>
                   </Grid>
                 </Grid>
@@ -351,7 +421,6 @@ export default function Spese() {
                   ></ClearIcon>
                 </Grid>
               </Grid>
-              
             </Grid>
           </Grid>
           <Grid

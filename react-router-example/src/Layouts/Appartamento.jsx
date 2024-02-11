@@ -11,12 +11,29 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
+import { useCookies } from "react-cookie";
 
 export default function Appartamento() {
   const location = useLocation();
   console.log(location.pathname);
   const navigate = useNavigate();
   const booleanArray = Array(8).fill(false);
+  const [cookies, setCookie] = useCookies();
+
+    React.useEffect(() => {
+      let sessioneTrovata = false;
+      for (const chiave in cookies) {
+        // Verifica se la chiave è "session" e se il suo valore ha una lunghezza maggiore di 1
+        if (chiave === "session" && cookies[chiave].length > 1) {
+          sessioneTrovata = true;
+          break; // Esci dal ciclo una volta trovato un valore valido
+        }
+      }
+      if (!sessioneTrovata) {
+        navigate("/", { replace: true });
+      }
+    }, [cookies]);
+
   switch (location.pathname) {
     case "/appartamento":
       booleanArray[0] = true;
