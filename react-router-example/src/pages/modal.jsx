@@ -9,6 +9,8 @@ import Option from "@mui/joy/Option";
 import MenuItem from "@mui/material/MenuItem";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { type } from "@testing-library/user-event/dist/type";
+import { set } from "react-hook-form";
 
 function Modal({ isOpen, onClose, value }) {
   //const defaultValue = modalValue.length > 0 ? modalValue[0].username : null;
@@ -22,37 +24,65 @@ function Modal({ isOpen, onClose, value }) {
   const [Cookies, setCookie] = useCookies();
 
   function aggiuntaSpesa() {
-    console.log(Cookies);
-    console.log(
-      "http://localhost:3002/apartments/" +
-        Cookies["apartment_id"] +
-        "/expenses"
-    );
+
+    if(nome!==""&&descrizione!==""&&importo!==""&&data!==""&&debitori.length>0){
+      const obj = {
+        name: nome,
+        description: descrizione,
+        import: parseFloat(importo),
+        date: data,
+        creditor: creditore,
+        debitors: debitori
+      }
+      axios
+        .post(
+          "http://localhost:3002/apartments/" +Cookies["apartment_id"] +"/expenses",
+          obj
+        )
+        .then((response) => {
+          console.log("aggiunta spesa");
+          console.log(response);
+          pulizia();
+          onClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+    }
+  }
+
+  function pulizia(){
+    setNome("");
+    setDescrizione("");
+    setimporto("");
+    setdata("");
+    setcreditore(modalValue[0].username);
+    setDebitori([modalValue[0].username]);
+  }
+
+  React.useEffect(() => {
     axios
-      .post(
-        "http://localhost:3002/apartments/" +
-          Cookies["apartment_id"] +
-          "/expenses",
-        {
-          name: nome,
-          description: descrizione,
-          import: importo,
-          date: data,
-          creditor: creditore,
-          debitors: debitori,
-        }
-      )
+      .get("http://localhost:3002/apartments/"+Cookies["apartment_id"]+"/members")
       .then((response) => {
-        console.log(response);
+        setModalValue(response.data.map(elemento => {
+          return { username: elemento };
+        }));
+        //setApartmenst(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  }, [isOpen]);
 
   React.useEffect(() => {
     setModalValue(value);
   }, [value]);
+
+  React.useEffect(() => {
+    console.log("dio cane dove sta il cambio");
+    console.log(modalValue);
+  }, [modalValue]);
 
   const nameChange = (event) => {
     setNome(event.target.value);
@@ -71,12 +101,10 @@ function Modal({ isOpen, onClose, value }) {
   };
   const debitoriChange = (event) => {
     setDebitori(event.target.value);
+    
   };
 
   if (!isOpen) return null;
-  console.log("siamo dentro dio cane");
-  console.log("modalValue");
-  console.log(modalValue);
   return (
     <div
       style={{
@@ -196,10 +224,13 @@ function Modal({ isOpen, onClose, value }) {
             </Grid>
             {/* Input per username */}
             <Grid xs={8}>
+            <Typography style={{ color: 'white' }}>Creditore</Typography>
+            </Grid>
+            <Grid xs={8}>
               <Select
-                defaultValue={modalValue[0].username}
+                //defaultValue={value[0].username}
                 onChange={creditoreChange}
-                //value={creditore}
+                value={creditore}
                 style={{
                   height: "100%",
                   width: "100%",
@@ -214,9 +245,14 @@ function Modal({ isOpen, onClose, value }) {
               </Select>
             </Grid>
             <Grid xs={8}>
+            <Typography style={{ color: 'white' }}>Lista Debitori</Typography>
+            </Grid>
+            
+            <Grid xs={8}>
               <Select
-                defaultValue={[modalValue[0].username]}
-                multiple={true}
+                //defaultValue={[value[0].username]}
+                multiple
+                value={debitori}
                 onChange={debitoriChange}
                 style={{
                   height: "100%",
@@ -231,7 +267,7 @@ function Modal({ isOpen, onClose, value }) {
                 ))}
               </Select>
             </Grid>
-
+                
             {/* Pulsanti Sign Up e Sign In */}
             <Grid
               container
@@ -256,7 +292,7 @@ function Modal({ isOpen, onClose, value }) {
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={async () => {
                     aggiuntaSpesa();
-                    onClose();
+                    
                   }}
                 >
                   Aggiungi

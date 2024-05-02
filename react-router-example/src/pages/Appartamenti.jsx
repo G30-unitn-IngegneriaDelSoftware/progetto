@@ -55,7 +55,6 @@ export default function Appartamenti() {
   const [apartments, setApartmenst] = React.useState([]);
   const [render, setRender] = React.useState(false);
   const [appartmentID, setAppartmentID] = React.useState("");
-  const [appCookies, setAppCookie] = useCookies(["apartment_id"]);
 
   const handleAppartmentIDChange = (event) => {
     setAppartmentID(event.target.value);
@@ -75,10 +74,6 @@ export default function Appartamenti() {
     }
   }, [cookies]);
 
-  React.useEffect(() => {
-    console.log("appcookies");
-    console.log(appCookies);
-  }, []);
 
   React.useEffect(() => {
     axios
@@ -186,7 +181,7 @@ export default function Appartamenti() {
                       onClick={async () => {
                         console.log("apartment._id");
                         console.log(apartment._id);
-                        setAppCookie("apartment_id", apartment._id);
+                        setCookie("apartment_id", apartment._id);
                         navigate("/appartamento");
                       }}
                     >

@@ -11,12 +11,13 @@ import { useCookies } from "react-cookie";
 async function tryLogin() {
   axios
     .post("http://localhost:3002/login", {
-      username: "username2",
-      password: "password2",
+      username: "username",
+      password: "password",
     })
     .then((response) => {
       console.log(response);
     });
+    
 }
 
 export default function Login() {
@@ -164,6 +165,7 @@ export default function Login() {
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={async () => {
                     await tryLogin();
+                    setCookie('username','username');
                     navigate("/appartamenti", { replace: true });
                   }}
                 >

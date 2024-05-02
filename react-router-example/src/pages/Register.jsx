@@ -211,7 +211,7 @@ export default function Register() {
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={async () => {
-                    await tryRegister2();
+                    await tryRegister();
                     navigate("/", { replace: true });
                   }}
                 >
