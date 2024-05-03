@@ -3,6 +3,8 @@ import Grid from "@mui/joy/Grid";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -11,7 +13,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Modal from "./modal";
-import { Button, Card, CardContent } from "@mui/material";
+import { Button, Card, CardContent, IconButton } from "@mui/material";
 
 export default function Spese() {
   const [cookies, setCookie] = useCookies();
@@ -177,9 +179,9 @@ export default function Spese() {
 
                   <Grid width={"35%"} direction="row">
                     <Box>
-                      <Typography variant="h5">{spesa.name}</Typography>
-                      <Typography variant="subtitle1">Id: {spesa._id}</Typography>
-                      <Typography variant="subtitle1">Importo: {spesa.import}</Typography>
+                      <Typography variant="h6" fontWeight="bold">{spesa.name}</Typography>
+                      <Typography variant="subtitle2">Id: {spesa._id}</Typography>
+                      <Typography variant="subtitle1">{spesa.creditor} ha pagato {spesa.import}€</Typography>
                       <Typography variant="body2">{spesa.description}</Typography>
                     </Box>
                   </Grid>
@@ -195,7 +197,18 @@ export default function Spese() {
                       ))}
                     </Grid>
                   </Grid>
-                  
+                  <Box >
+                    <IconButton
+                      aria-label="edit"
+                      style = { {color: "#142A3A", padding: "0"} }>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      style = { {color: "#142A3A", padding: "0"} }>
+                        <DeleteIcon />
+                    </IconButton>
+                  </Box>
                 </Grid>
               ))}
             </Grid>
