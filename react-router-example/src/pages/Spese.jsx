@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
 import Divider from "@mui/material/Divider";
-import ButtonBase from "@mui/material/ButtonBase";
+import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ModeIcon from "@mui/icons-material/Mode";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Modal from "./modal";
+import { Button, Card, CardContent } from "@mui/material";
 
 export default function Spese() {
   const [cookies, setCookie] = useCookies();
@@ -56,8 +57,6 @@ export default function Spese() {
           "/expenses"
       )
       .then(async (response) => {
-        //console.log("spese");
-        //console.log(response.data);
         setSpese(response.data);
       })
       .catch((error) => {
@@ -73,7 +72,7 @@ export default function Spese() {
       .then(async (response) => {
         console.log("debiti");
         console.log(response.data);
-        //setSpese(response.data);
+        setDebits(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -129,7 +128,7 @@ export default function Spese() {
         style={{
           height: "90%",
           width: "80%",
-          //backgroundColor: "rgb(203, 231, 253)",
+          // backgroundColor: "rgb(203, 231, 253)",
         }}
       >
         <Grid
@@ -140,7 +139,7 @@ export default function Spese() {
           style={{
             height: "10%",
             width: "100%",
-            //backgroundColor: "rgb(94, 175, 70)",
+            // backgroundColor: "rgb(94, 175, 70)",
           }}
         >
           <Typography
@@ -151,383 +150,93 @@ export default function Spese() {
             Spese page
           </Typography>
         </Grid>
+        
         <Grid
           container
-          direction="column"
+          spacing={0}
+          padding={2}
           style={{
-            borderRadius: "5%",
+            borderRadius: "25px",
             height: "90%",
             width: "100%",
             backgroundColor: "rgb(203, 231, 253)",
           }}
         >
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            style={{
-              height: "79%",
-              width: "100%",
-              //backgroundColor: "rgb(93, 131, 53)",
-            }}
-          >
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-              style={{
-                height: "10%",
-                width: "100%",
-                //backgroundColor: "rgb(193, 231,153)",
-              }}
-            >
-              <Modal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                value={[{username:cookies["username"]}]}
-              />
-              <ButtonBase
-                onClick={() => {
-                  openModal();
-                }}
-                style={{
-                  height: "100%",
-                  width: "15%",
-                  //backgroundColor: "rgb(213, 131,153)",
-                  marginRight: "1%",
-                  marginTop: "1%",
-                }}
-              >
-                <Grid
+          <div style={{overflowY: "scroll", height: "100%", width: "80%"}}>
+            <Grid container >
+              {spese.map((spesa, index) => (
+                <Grid 
                   container
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    //backgroundColor: "rgb(93, 131,153)",
-                  }}
-                >
-                  <Grid
-                    container
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                      height: "100%",
-                      width: "80%",
-                      //backgroundColor: "rgb(93, 31,153)",
-                    }}
-                  >
-                    <Typography>Aggiungi</Typography>
-                    <Typography>spesa</Typography>
+                  key={index}
+                  margin={1} 
+                  width={"95%"}
+                  backgroundColor={"#ACDBFF"}
+                  padding={1} 
+                  borderLeft={1} 
+                  borderColor={"#004C86"}>
+
+                  <Grid width={"35%"} direction="row">
+                    <Box>
+                      <Typography variant="h5">{spesa.name}</Typography>
+                      <Typography variant="subtitle1">Id: {spesa._id}</Typography>
+                      <Typography variant="subtitle1">Importo: {spesa.import}</Typography>
+                      <Typography variant="body2">{spesa.description}</Typography>
+                    </Box>
                   </Grid>
-                  <Grid
-                    container
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                      height: "100%",
-                      width: "20%",
-                      //backgroundColor: "rgb(193, 31,153)",
-                    }}
-                  >
-                    <AddCircleIcon />
+                  <Divider orientation="vertical"/>
+                  <Grid item xs padding={1}>
+                    <Typography variant="subtitle2">Utenti coinvolti:</Typography>
+                    <Grid container direction="row">
+                      {spesa.debitors.map((debitor, index1) => (
+                        <Box key={index1} margin={1}>
+                          <PersonIcon />
+                          <Typography variant="body1">{debitor}</Typography> 
+                        </Box>
+                      ))}
+                    </Grid>
                   </Grid>
+                  
                 </Grid>
-              </ButtonBase>
+              ))}
             </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="flex-start"
-              style={{
-                height: "87%",
-                width: "100%",
-                //backgroundColor: "rgb(153, 31, 53)",
-                marginTop: "1%",
-                overflow: "auto",
-              }}
-            >
-              {spese.map((spesa,index) => (
-                  <Grid
-                  key={spesa._id}
-                  container
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{
-                    height: "30%",
-                    width: "90%",
-                    backgroundColor: "rgb(172, 219, 255)",
-                    marginTop: "1%",
-                  }}
-                >
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                      height: "100%",
-                      width: "44%",
-                      //backgroundColor: "rgb(83, 131, 43)",
-                    }}
-                  >
-                    <Grid
-                      container
-                      justifyContent="center"
-                      alignItems="center"
-                      style={{
-                        height: "100%",
-                        width: "30%",
-                        //backgroundColor: "rgb(183, 131, 43)",
-                      }}
-                    >
-                      <Grid
-                        style={{
-                          height: "80%",
-                          width: "90%",
-                          backgroundColor: "rgb(0, 76, 134)",
-                          borderRadius: "50%",
-                        }}
-                      ></Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center"
-                      style={{
-                        height: "100%",
-                        width: "70%",
-                        //backgroundColor: "rgb(83, 31, 43)",
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                      {spesa._id}
-                      </Typography>
-                      <Typography> {spesa.creditor}</Typography>
-                      <Typography> {spesa.import}</Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                      height: "100%",
-                      width: "1%",
-                      //backgroundColor: "rgb(183, 131, 43)",
-                    }}
-                  >
-                    <Divider orientation="vertical" />
-                  </Grid>
-
-                  <Grid
-                    container
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                      height: "100%",
-                      width: "48%",
-                      //backgroundColor: "rgb(33, 231, 53)",
-                    }}
-                  >
-                    <Grid
-                      container
-                      direction="row"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                      style={{
-                        height: "20%",
-                        width: "100%",
-                        //backgroundColor: "rgb(2303, 131, 53)",
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Debitori
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      container
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="flex-start"
-                      style={{
-                        height: "80%",
-                        width: "100%",
-                        //backgroundColor: "rgb(133, 21, 53)",
-                        overflow: "auto",
-                      }}
-                    >
-                  {(spesa.debitors).map((debitore) => (
-                    <Grid
-                    key={debitore}
-                    container
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                      height: "90%",
-                      width: "30%",
-                      //backgroundColor: "rgb(93, 121, 53)",
-                      marginLeft: "2%",
-                    }}
-                  >
-                    <PersonIcon
-                      sx={{
-                        height: "50%",
-                        width: "100%",
-                        //backgroundColor: "rgb(143, 11, 113)",
-                      }}
-                    />
-                    <Typography sx={{ fontWeight: "bold" }}>{debitore}</Typography>
-                    <Typography sx={{ fontSize: "80%" }}>{(spesa.import)/(spesa.debitors.length)}$</Typography>
-                  </Grid>
-                  ))}
-                    </Grid>
-                  </Grid>
-
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-end"
-                    alignItems="flex-start"
-                    style={{
-                      height: "100%",
-                      width: "7%",
-                      backgroundColor: "rgb(193, 71, 153)",
-                    }}
-                  >
-                    <ModeIcon
-                      sx={{
-                        borderRadius: "50%",
-                        border: "1px solid black",
-                        //backgroundColor: "rgb(43, 111, 113)",
-                      }}
-                    ></ModeIcon>
-                    <ClearIcon
-                      sx={{
-                        borderRadius: "50%",
-                        border: "1px solid black",
-                        //backgroundColor: "rgb(43, 111, 113)",
-                      }}
-                      onClick={(event) => eliminaTransazione(spesa._id, event)}
-                    ></ClearIcon>
-                  </Grid>
-                </Grid>
-                ))}
-              
-
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-            style={{
-              width: "100%",
-              //backgroundColor: "rgb(93, 131, 53)",
-            }}
-          >
-            <Divider
-              style={{
-                width: "95%",
-              }}
+          </div>
+          <Divider orientation="vertical"/>
+          
+          <Grid item marginLeft={2} xs>
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              value={[{username:cookies["username"]}]}
             />
-          </Grid>
-          <Grid
-            container
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            style={{
-              height: "20%",
-              width: "100%",
-              //backgroundColor: "rgb(193, 31, 153)",
-            }}
-          >
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              style={{ width: "100%", height: "10%" }}
-            >
-              <Typography sx={{ fontWeight: "bold" }}>SPESE</Typography>
-            </Grid>
-
-            <Grid
-              container
-              directio="column"
-              style={{
-                height: "80%",
-                width: "100%",
-                //backgroundColor: "rgb(193, 31, 153)",
-                overflow: "auto",
+            <Button 
+              variant="outlined" 
+              endIcon={<AddCircleIcon />} 
+              onClick={() => {
+                openModal();
               }}
-            >
-              <Grid
-                container
-                direction="column"
-                justifyContent="flex-start"
-                alignItems="center"
-                style={{
-                  marginTop: "2%",
-                  height: "70%",
-                  width: "20%",
-                  marginLeft: "2%",
-                  //backgroundColor: "rgb(143, 211, 113)",
-                  border: "1px solid",
-                  borderColor: "rgb(5, 22, 34)",
-                  borderRadius: "10%",
-                }}
+              style = { {color: "#142A3A", margin: "10px"} }
               >
-                <Grid
-                  container
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{
-                    height: "100%",
-                    width: "40%",
-                    //backgroundColor: "rgb(143, 211, 63)",
-                  }}
-                >
-                  <PersonIcon
-                    sx={{
-                      height: "70%",
-                      width: "100%",
-                      //backgroundColor: "rgb(143, 11, 113)",
-                    }}
-                  />
-                </Grid>
-                <Grid
-                  container
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{
-                    height: "100%",
-                    width: "60%",
-                    //backgroundColor: "rgb(143, 211, 113)",
-                  }}
-                >
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    inquilino1
-                  </Typography>
-                  <Typography>-100</Typography>
-                </Grid>
-              </Grid>
-            </Grid>
+              Aggiungi Spesa
+            </Button>
+
+            <Divider style={{ width: "100%"}}/>
+
+            <Box justifyContent="center" display="flex">
+              <Typography variant="h6">SALDI</Typography>
+            </Box>
+            {debits.map((obj, index) => (
+              <Card key={index} style={{backgroundColor: "transparent", boxShadow: "none", marginTop: "5px"}}>
+                <Typography variant="subtitle1" fontWeight={"bold"}>{obj.member}</Typography>
+                <CardContent style={{ paddingTop: "0", paddingBottom: "0"}}>
+                  {obj.debitors.map((debitor, index1) => (
+                    debitor.username !== obj.member && <Typography key={index1}>{debitor.username} deve {debitor.import}€</Typography>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
           </Grid>
         </Grid>
+
       </Grid>
     </Grid>
   );
