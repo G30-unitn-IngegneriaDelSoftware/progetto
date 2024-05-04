@@ -186,7 +186,7 @@ export default function Spese() {
                     </Box>
                   </Grid>
                   <Divider orientation="vertical"/>
-                  <Grid item xs padding={1}>
+                  <Grid xs padding={1}>
                     <Typography variant="subtitle2">Utenti coinvolti:</Typography>
                     <Grid container direction="row">
                       {spesa.debitors.map((debitor, index1) => (
@@ -215,7 +215,7 @@ export default function Spese() {
           </div>
           <Divider orientation="vertical"/>
           
-          <Grid item marginLeft={2} xs>
+          <Grid marginLeft={2} xs>
             <Modal
               isOpen={isModalOpen}
               onClose={closeModal}
