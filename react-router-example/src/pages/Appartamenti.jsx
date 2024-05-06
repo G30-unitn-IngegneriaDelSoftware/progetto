@@ -74,6 +74,10 @@ export default function Appartamenti() {
     }
   }, [cookies]);
 
+  React.useEffect(() => {
+    console.log("appcookies");
+    console.log(appCookies);
+  }, []);
 
   React.useEffect(() => {
     axios
@@ -181,7 +185,7 @@ export default function Appartamenti() {
                       onClick={async () => {
                         console.log("apartment._id");
                         console.log(apartment._id);
-                        setCookie("apartment_id", apartment._id);
+                        setAppCookie("apartment_id", apartment._id);
                         navigate("/appartamento");
                       }}
                     >
