@@ -12,19 +12,24 @@ import axios from "axios";
 import { type } from "@testing-library/user-event/dist/type";
 import { set } from "react-hook-form";
 
-function Modal({ isOpen, onClose, value }) {
+function EditModal({ isOpen, onClose, oggetto }) {
   //const defaultValue = modalValue.length > 0 ? modalValue[0].username : null;
-  const [modalValue, setModalValue] = React.useState(value);
-  const [nome, setNome] = React.useState("");
-  const [descrizione, setDescrizione] = React.useState("");
-  const [importo, setimporto] = React.useState("");
-  const [data, setdata] = React.useState("");
-  const [creditore, setcreditore] = React.useState(modalValue[0].username);
-  const [debitori, setDebitori] = React.useState([modalValue[0].username]);
+  const uglydate=new Date(oggetto.data);
+  const anno = uglydate.getFullYear();
+  const mese = (uglydate.getMonth() + 1).toString().padStart(2, "0");
+  const giorno = uglydate.getDate().toString().padStart(2, "0");
+  const [modalValue, setModalValue] = React.useState([oggetto.creditore]);
+  const [id, setId] = React.useState(oggetto._id);
+  const [nome, setNome] = React.useState(oggetto.name);
+  const [descrizione, setDescrizione] = React.useState(oggetto.descrizione);
+  const [importo, setimporto] = React.useState(oggetto.importo);
+  const [data, setdata] = React.useState(`${anno}-${mese}-${giorno}`);
+  const [creditore, setcreditore] = React.useState(oggetto.creditore);
+  const [debitori, setDebitori] = React.useState(oggetto.debitori);
   const [Cookies, setCookie] = useCookies();
 
-  function aggiuntaSpesa() {
-
+  function ModificaSpesa() {
+    
     if(nome!==""&&descrizione!==""&&importo!==""&&data!==""&&debitori.length>0){
       const obj = {
         name: nome,
@@ -35,14 +40,13 @@ function Modal({ isOpen, onClose, value }) {
         debitors: debitori
       }
       axios
-        .post(
-          "http://localhost:3002/apartments/" +Cookies["apartment_id"] +"/expenses",
+        .patch(
+          "http://localhost:3002/expenses/"+id,
           obj
         )
         .then((response) => {
           console.log("aggiunta spesa");
           console.log(response);
-          pulizia();
           onClose();
         })
         .catch((error) => {
@@ -50,16 +54,9 @@ function Modal({ isOpen, onClose, value }) {
         });
 
     }
+    
   }
 
-  function pulizia(){
-    setNome("");
-    setDescrizione("");
-    setimporto("");
-    setdata("");
-    setcreditore(modalValue[0].username);
-    setDebitori([modalValue[0].username]);
-  }
 
   React.useEffect(() => {
     axios
@@ -74,15 +71,6 @@ function Modal({ isOpen, onClose, value }) {
         console.log(error);
       });
   }, [isOpen]);
-
-  React.useEffect(() => {
-    setModalValue(value);
-  }, [value]);
-
-  React.useEffect(() => {
-    console.log("dio cane dove sta il cambio");
-    console.log(modalValue);
-  }, [modalValue]);
 
   const nameChange = (event) => {
     setNome(event.target.value);
@@ -291,11 +279,11 @@ function Modal({ isOpen, onClose, value }) {
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
                   onClick={async () => {
-                    aggiuntaSpesa();
+                    ModificaSpesa();
                     
                   }}
                 >
-                  Aggiungi
+                  Modifica
                 </Button>
               </Grid>
             </Grid>
@@ -306,4 +294,4 @@ function Modal({ isOpen, onClose, value }) {
   );
 }
 
-export default Modal;
+export default EditModal;

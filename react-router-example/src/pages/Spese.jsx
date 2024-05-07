@@ -12,7 +12,9 @@ import ModeIcon from "@mui/icons-material/Mode";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import Modal from "./modal";
+import EditModal from "../Modals/EditExpansesModal";
+import DeleteModal from "../Modals/DeleteExpansesModal";
+import AddModal from "../Modals/AddExpansesModal";
 import { Button, Card, CardContent, IconButton } from "@mui/material";
 
 export default function Spese() {
@@ -20,8 +22,13 @@ export default function Spese() {
   const navigate = useNavigate();
   const [spese, setSpese] = React.useState([]);
   const [render, setRender] = React.useState(false);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [modalValue, setModalValue] = React.useState([{ username: "None" }]);
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(Array(spese.length).fill(false));
+  const [modalAddValue, setAddModalValue] = React.useState([{ username: "None" }]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(Array(spese.length).fill(false));
+  const [modalEditValue, setEditModalValue] = React.useState(Array(spese.length).fill(false));
+  const [modalDeleteValue, setDeleteModalValue] = React.useState([{ username: "None" }]);
+
   const [debits,setDebits]=React.useState([]);
 
 
@@ -46,7 +53,7 @@ export default function Spese() {
     axios
       .get("http://localhost:3002/users")
       .then(async (response) => {
-        await setModalValue(response.data); // Aspetta che setModalValue sia completato
+        await setAddModalValue(response.data); // Aspetta che setModalValue sia completato
 
       })
       .catch((error) => {
@@ -59,12 +66,13 @@ export default function Spese() {
           "/expenses"
       )
       .then(async (response) => {
+        console.log("spese");
+        console.log(response.data);
         setSpese(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-      console.log("http://localhost:3002/apartments/" +cookies["apartment_id"] +"/debits");
       axios
       .get(
         "http://localhost:3002/apartments/" +
@@ -81,16 +89,69 @@ export default function Spese() {
       });
   }, []);
 
+  React.useEffect(() => {
+    axios
+      .get(
+        "http://localhost:3002/apartments/" +
+          cookies["apartment_id"] +
+          "/expenses"
+      )
+      .then(async (response) => {
+        setSpese(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      axios
+      .get(
+        "http://localhost:3002/apartments/" +
+          cookies["apartment_id"] +
+          "/debits"
+      )
+      .then(async (response) => {
+        console.log("debiti");
+        console.log(response.data);
+        setDebits(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [render]);
 
-  const openModal = () => {
-    console.log("modalValuepreapertura");
-    console.log(modalValue);
-    setIsModalOpen(true);
+
+  const openAddModal = () => {
+    //console.log("modalValuepreapertura");
+    //console.log(modalValue);
+    setIsAddModalOpen(true);
+  };
+  const openEditModal = (index) => {
+    const updatedIsEditModalOpen = [...isEditModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsEditModalOpen[index] = true; // Imposto il valore corrispondente all'indice su true
+    setIsEditModalOpen(updatedIsEditModalOpen); // Aggiorno lo stato
+  };
+  const openDeleteModal = (index) => {
+    const updatedIsDeleteModalOpen = [...isDeleteModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsDeleteModalOpen[index] = true; // Imposto il valore corrispondente all'indice su true
+    setIsDeleteModalOpen(updatedIsDeleteModalOpen); // Aggiorno lo stato
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
   };
+  const closeEditModal = (index) => {
+    const updatedIsEditModalOpen = [...isEditModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsEditModalOpen[index] = false; // Imposto il valore corrispondente all'indice su false
+    setIsEditModalOpen(updatedIsEditModalOpen); // Aggiorno lo stato
+    setRender(!render);
+  };
+
+  const closeDeleteModal = (index) => {
+    const updatedIsDeleteModalOpen = [...isDeleteModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsDeleteModalOpen[index] = false; // Imposto il valore corrispondente all'indice su false
+    setIsDeleteModalOpen(updatedIsDeleteModalOpen); // Aggiorno lo stato
+    setRender(!render);
+  };
+
 
   function eliminaTransazione(id_trans,event){
     console.log("http://localhost:3002/apartments/" +
@@ -198,15 +259,43 @@ export default function Spese() {
                     </Grid>
                   </Grid>
                   <Box >
+
+                    <EditModal
+                      isOpen={isEditModalOpen[index]}
+                      onClose={() => closeEditModal(index)}
+                      oggetto={{_id:spesa._id,
+                                name:spesa.name,
+                                descrizione:spesa.description,
+                                importo:spesa.import,
+                                data:spesa.date,
+                                creditore:spesa.creditor,
+                                debitori:spesa.debitors
+                              }}
+                    />
                     <IconButton
                       aria-label="edit"
-                      style = { {color: "#142A3A", padding: "0"} }>
-                        <EditIcon />
+                      style = { {color: "#142A3A", padding: "0"} }
+                      onClick={() => {
+                        openEditModal(index);
+                      }}
+                    >
+                      <EditIcon />
                     </IconButton>
+                    <DeleteModal
+                      isOpen={isDeleteModalOpen[index]}
+                      onClose={() => closeDeleteModal(index)}
+                      value={spesa._id}
+                      index={index}
+                    />
                     <IconButton
                       aria-label="delete"
-                      style = { {color: "#142A3A", padding: "0"} }>
-                        <DeleteIcon />
+                      style = { {color: "#142A3A", padding: "0"} }
+                      onClick={() => {
+                        openDeleteModal(index);
+                      }}
+                    >
+
+                      <DeleteIcon />
                     </IconButton>
                   </Box>
                 </Grid>
@@ -216,16 +305,16 @@ export default function Spese() {
           <Divider orientation="vertical"/>
           
           <Grid marginLeft={2} xs>
-            <Modal
-              isOpen={isModalOpen}
-              onClose={closeModal}
+            <AddModal
+              isOpen={isAddModalOpen}
+              onClose={closeAddModal}
               value={[{username:cookies["username"]}]}
             />
             <Button 
               variant="outlined" 
               endIcon={<AddCircleIcon />} 
               onClick={() => {
-                openModal();
+                openAddModal();
               }}
               style = { {color: "#142A3A", margin: "10px"} }
               >
