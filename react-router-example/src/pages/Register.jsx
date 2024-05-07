@@ -46,7 +46,7 @@ export default function Register() {
     setTelephone(event.target.value);
   };
   const handleAgainPasswordChange = (event) => {
-    setTelephone(event.target.value);
+    setAgainPassword(event.target.value);
   };
 
 
@@ -68,6 +68,8 @@ export default function Register() {
       .catch((error) => {
         console.log(error);
       });
+    }else{
+      console.log("Did not worked");
     }
   }
 
