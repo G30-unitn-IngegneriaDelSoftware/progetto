@@ -7,45 +7,70 @@ import Button from "@mui/joy/Button";
 import { useNavigate, redirect, Form } from "react-router-dom";
 import axios from "axios";
 
-async function tryRegister() {
-  axios
-    .post("http://localhost:3002/register", {
-      email: "email@gmail.com",
-      password: "password",
-      username: "username",
-      firstName: "firstName",
-      lastName: "lastname",
-      birthDate: "2024-01-04",
-      telephone: "3349897083",
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-async function tryRegister2() {
-  axios
-    .post("http://localhost:3002/register", {
-      email: "email2@gmail.com",
-      password: "password2",
-      username: "username2",
-      firstName: "firstName2",
-      lastName: "lastname2",
-      birthDate: "2024-01-04",
-      telephone: "3349897083",
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
 export default function Register() {
+
   const navigate = useNavigate();
+  const [error, setError] = React.useState(null); // State per gestire l'errore
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [againpassword, setAgainPassword] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastNme] = React.useState("");
+  const [birthDate, setBirthDate] = React.useState("");
+  const [telephone, setTelephone] = React.useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastNme(event.target.value);
+  };
+  const handleBirthDateChange = (event) => {
+    setBirthDate(event.target.value);
+  };
+
+  const handleTelephonedChange = (event) => {
+    setTelephone(event.target.value);
+  };
+  const handleAgainPasswordChange = (event) => {
+    setTelephone(event.target.value);
+  };
+
+
+  async function tryRegister() {
+    if(email!==""&&password!==""&&againpassword!==""&&username!==""&&firstName!==""&&lastName!==""&&birthDate!==""&&telephone!==""&&password===againpassword){
+      axios
+      .post("http://localhost:3002/register", {
+        email: email,
+        password: password,
+        username: username,
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+        telephone: telephone,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
   return (
     <div
       style={{
@@ -114,6 +139,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={firstName}
+                  onChange={handleFirstNameChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -124,6 +151,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={lastName}
+                  onChange={handleLastNameChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -134,6 +163,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={username}
+                  onChange={handleUsernameChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -144,6 +175,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={email}
+                  onChange={handleEmailChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -154,6 +187,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={birthDate}
+                  onChange={handleBirthDateChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -164,6 +199,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={telephone}
+                  onChange={handleTelephonedChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -174,6 +211,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
               </Grid>
               <Grid xs={12}>
@@ -184,6 +223,8 @@ export default function Register() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={againpassword}
+                  onChange={handleAgainPasswordChange}
                 />
               </Grid>
             </Grid>

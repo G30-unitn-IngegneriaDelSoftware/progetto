@@ -15,8 +15,11 @@ import ModeIcon from "@mui/icons-material/Mode";
 import ClearIcon from "@mui/icons-material/Clear";
 import PersonIcon from "@mui/icons-material/Person";
 import ButtonBase from "@mui/material/ButtonBase";
+import AddModal from "../Modals/AddApartmentModal";
+import DeleteModal from "../Modals/DeleteApartmentModal";
+import EditModal from "../Modals/EditApartmentModal.jsx";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+import { Cookies, useCookies } from "react-cookie";
 import { IconButton } from "@mui/material";
 //axios.defaults.withCredentials = true;
 async function creaAppartamento() {
@@ -51,11 +54,57 @@ async function agggiungiAppartamento(id) {
 }
 
 export default function Appartamenti() {
-  const [cookies, setCookie] = useCookies(["session"]);
+  const [cookies, setCookie,removeCookie] = useCookies(["session"]);
   const navigate = useNavigate();
   const [apartments, setApartmenst] = React.useState([]);
   const [render, setRender] = React.useState(false);
   const [appartmentID, setAppartmentID] = React.useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(Array(apartments.length).fill(false));
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(Array(apartments.length).fill(false));
+
+  function logout(){
+    removeCookie("apartment_id");
+    removeCookie("username");
+    removeCookie("session");
+  }
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+    setRender(!render);
+  };
+
+  const openAddModal = () => {
+    //console.log("modalValuepreapertura");
+    //console.log(modalValue);
+    setIsAddModalOpen(true);
+  };
+
+  const closeDeleteModal = (index) => {
+    const updatedIsDeleteModalOpen = [...isDeleteModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsDeleteModalOpen[index] = false; // Imposto il valore corrispondente all'indice su false
+    setIsDeleteModalOpen(updatedIsDeleteModalOpen); // Aggiorno lo stato
+    setRender(!render);
+  };
+
+  const openDeleteModal = (index) => {
+    const updatedIsDeleteModalOpen = [...isDeleteModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsDeleteModalOpen[index] = true; // Imposto il valore corrispondente all'indice su true
+    setIsDeleteModalOpen(updatedIsDeleteModalOpen); // Aggiorno lo stato
+  };
+
+  const closeEditModal = (index) => {
+    const updatedIsEditModalOpen = [...isEditModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsEditModalOpen[index] = false; // Imposto il valore corrispondente all'indice su false
+    setIsEditModalOpen(updatedIsEditModalOpen); // Aggiorno lo stato
+    setRender(!render);
+  };
+
+  const openEditModal = (index) => {
+    const updatedIsEditModalOpen = [...isEditModalOpen]; // Creo una copia dell'array di booleani
+    updatedIsEditModalOpen[index] = true; // Imposto il valore corrispondente all'indice su true
+    setIsEditModalOpen(updatedIsEditModalOpen); // Aggiorno lo stato
+  };
 
   const handleAppartmentIDChange = (event) => {
     setAppartmentID(event.target.value);
@@ -80,6 +129,7 @@ export default function Appartamenti() {
     axios
       .get("http://localhost:3002/apartments")
       .then((response) => {
+        console.log("Appartamenti");
         console.log(response);
         setApartmenst(response.data);
       })
@@ -298,31 +348,40 @@ export default function Appartamenti() {
                                   //backgroundColor: "rgb(43, 111, 113)",
                                 }}
                               >
+                                <EditModal
+                                  isOpen={isEditModalOpen[index]}
+                                  onClose={() => closeEditModal(index)}
+                                  id={apartment._id}
+                                  value={{nome:apartment.name,descrizione:apartment.description}}
+                                />
+                                {/*verifico che l'utente sia admin per vedere il puslante di modicaS*/}
+                                {apartment.admin===cookies["username"] &&
+                                  <IconButton
+                                    aria-label="edit"
+                                    style = { {color: "#142A3A", padding: "0"} }
+                                    onClick={() => {
+                                      openEditModal(index);
+                                    }}>
+                                    <ModeIcon
+                                      sx={{
+                                        borderRadius: "50%",
+                                        border: "1px solid black",
+                                        //backgroundColor: "rgb(43, 111, 113)",
+                                      }}
+                                    ></ModeIcon>
+                                  </IconButton>
+                                }
+                                <DeleteModal
+                                  isOpen={isDeleteModalOpen[index]}
+                                  onClose={() => closeDeleteModal(index)}
+                                  value={apartment._id}
+                                />
                                 <IconButton
                                   aria-label="edit"
-                                  style = { {color: "#142A3A", padding: "0"} }>
-                                  <ShareIcon
-                                    sx={{
-                                      borderRadius: "50%",
-                                      border: "1px solid black",
-                                      //backgroundColor: "rgb(43, 111, 113)",
-                                    }}
-                                  ></ShareIcon>
-                                </IconButton>
-                                <IconButton
-                                  aria-label="edit"
-                                  style = { {color: "#142A3A", padding: "0"} }>
-                                  <ModeIcon
-                                    sx={{
-                                      borderRadius: "50%",
-                                      border: "1px solid black",
-                                      //backgroundColor: "rgb(43, 111, 113)",
-                                    }}
-                                  ></ModeIcon>
-                                </IconButton>
-                                <IconButton
-                                  aria-label="edit"
-                                  style = { {color: "#142A3A", padding: "0"} }>
+                                  style = { {color: "#142A3A", padding: "0"} }
+                                  onClick={() => {
+                                    openDeleteModal(index);
+                                  }}>
                                   <ClearIcon
                                     sx={{
                                       borderRadius: "50%",
@@ -505,6 +564,7 @@ export default function Appartamenti() {
                 style={{
                   height: "90%",
                   width: "90%",
+                  //background: "rgb(0, 76, 134)" 
                 }}
               >
                 <Grid
@@ -517,11 +577,16 @@ export default function Appartamenti() {
                     height: "40%",
                   }}
                 >
+                  <AddModal
+                    isOpen={isAddModalOpen}
+                    onClose={closeAddModal}
+                  />
                   <Button
                     variant="solid"
                     style={{ background: "rgb(0, 76, 134)" }}
                     onClick={async () => {
-                      creaAppartamento();
+                      //creaAppartamento();
+                      openAddModal();
                       setRender(!render);
                     }}
                   >
@@ -543,6 +608,7 @@ export default function Appartamenti() {
                   style={{
                     width: "90%",
                     height: "50%",
+                    //background: "rgb(0, 76, 134)" 
                   }}
                 >
                   <Grid
@@ -576,6 +642,16 @@ export default function Appartamenti() {
                     Unisciti nuovo appartamento
                   </Button>
                 </Grid>
+                <Divider flexItem />
+                <Button
+                    variant="solid"
+                    style={{ background: "rgb(0, 76, 134)",marginTop:"2vh" }}
+                    onClick={async () => {
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </Button>
               </Grid>
             </Grid>
           </Grid>

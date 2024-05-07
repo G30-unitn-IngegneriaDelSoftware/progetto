@@ -4,43 +4,42 @@ import Input from "@mui/joy/Input";
 import Grid from "@mui/joy/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/joy/Button";
-import { useNavigate, redirect, Form } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-
-async function tryLogin() {
-  axios
-    .post("http://localhost:3002/login", {
-      username: "username",
-      password: "password",
-    })
-    .then((response) => {
-      console.log(response);
-    });
-    
-}
 
 export default function Login() {
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies();
-  console.log(cookies);
-  
-  React.useEffect(() => {
-    let sessioneTrovata = false;
-    for (const chiave in cookies) {
-      // Verifica se la chiave è "session" e se il suo valore ha una lunghezza maggiore di 1
-      if (chiave === "session" && cookies[chiave].length > 1) {
-        sessioneTrovata = true;
-        break; // Esci dal ciclo una volta trovato un valore valido
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState(null); // State per gestire l'errore
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  async function tryLogin() {
+    try {
+      if (username !== "" && password !== "") {
+        const response = await axios.post("http://localhost:3002/login", {
+          username: username,
+          password: password,
+        });
+        setCookie('username', username);
+        navigate("/appartamenti", { replace: true });
       }
+    } catch (error) {
+      setError("Credenziali non valide. Riprova."); // Imposta il messaggio di errore
+      setPassword("");
+      setUsername("");
+      console.error("Errore durante il login:", error);
     }
-    if (sessioneTrovata) {
-      console.log("esisto");
-      navigate("/appartamenti", { replace: true });
-    } else {
-      console.log("non esisto");
-    }
-  }, [cookies]); // <- add the count variable here
+  }
 
   return (
     <div
@@ -111,6 +110,8 @@ export default function Login() {
                     background: "rgb(0, 76, 134)",
                     color: "rgb(252, 252, 252)",
                   }}
+                  value={username}
+                  onChange={handleUsernameChange}
                 />
               </Grid>
               <Grid
@@ -129,15 +130,19 @@ export default function Login() {
                       background: "rgb(0, 76, 134)",
                       color: "rgb(252, 252, 252)",
                     }}
+                    value={password}
+                    onChange={handlePasswordChange}
                   />
                 </Grid>
-                <Typography
-                  variant="caption"
-                  color="rgb(252, 252, 252)"
-                  sx={{ ml: 10 }}
-                >
-                  Dimenticato la Password?
-                </Typography>
+                {error && ( // Mostra il messaggio di errore se presente
+                  <Typography
+                    variant="caption"
+                    color="error"
+                    sx={{ ml: 10 }}
+                  >
+                    {error}
+                  </Typography>
+                )}
               </Grid>
             </Grid>
             <Grid
@@ -163,11 +168,7 @@ export default function Login() {
                 <Button
                   variant="solid"
                   style={{ background: "rgb(0, 76, 134)" }}
-                  onClick={async () => {
-                    await tryLogin();
-                    setCookie('username','username');
-                    navigate("/appartamenti", { replace: true });
-                  }}
+                  onClick={tryLogin}
                 >
                   Sign In
                 </Button>
