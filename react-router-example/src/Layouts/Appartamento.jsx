@@ -119,7 +119,7 @@ export default function Appartamento() {
               width: "60%",
               //backgroundColor: "rgb(94, 175, 70)",
             }}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/appartamenti")}
           >
             <Grid
               container

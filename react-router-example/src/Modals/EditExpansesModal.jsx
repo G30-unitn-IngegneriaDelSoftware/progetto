@@ -57,7 +57,6 @@ function EditModal({ isOpen, onClose, oggetto }) {
     
   }
 
-
   React.useEffect(() => {
     axios
       .get("http://localhost:3002/apartments/"+Cookies["apartment_id"]+"/members")
