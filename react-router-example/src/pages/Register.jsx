@@ -207,6 +207,7 @@ export default function Register() {
               </Grid>
               <Grid xs={12}>
                 <Input
+                  type="password"
                   placeholder="Password"
                   variant="soft"
                   style={{
@@ -219,6 +220,7 @@ export default function Register() {
               </Grid>
               <Grid xs={12}>
                 <Input
+                  type="password"
                   placeholder="Conferma Password"
                   variant="soft"
                   style={{
