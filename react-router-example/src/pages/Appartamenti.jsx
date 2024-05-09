@@ -376,20 +376,22 @@ export default function Appartamenti() {
                                   onClose={() => closeDeleteModal(index)}
                                   value={apartment._id}
                                 />
-                                <IconButton
-                                  aria-label="edit"
-                                  style = { {color: "#142A3A", padding: "0"} }
-                                  onClick={() => {
-                                    openDeleteModal(index);
-                                  }}>
-                                  <ClearIcon
-                                    sx={{
-                                      borderRadius: "50%",
-                                      border: "1px solid black",
-                                      //backgroundColor: "rgb(43, 111, 113)",
-                                    }}
-                                  ></ClearIcon>
-                                </IconButton>
+                                {apartment.admin===cookies["username"] &&
+                                  <IconButton
+                                    aria-label="edit"
+                                    style = { {color: "#142A3A", padding: "0"} }
+                                    onClick={() => {
+                                      openDeleteModal(index);
+                                    }}>
+                                    <ClearIcon
+                                      sx={{
+                                        borderRadius: "50%",
+                                        border: "1px solid black",
+                                        //backgroundColor: "rgb(43, 111, 113)",
+                                      }}
+                                    ></ClearIcon>
+                                  </IconButton>
+                                }
                               </Grid>
                               <ButtonBase                            
                               style={{

@@ -124,6 +124,7 @@ export default function Login() {
               >
                 <Grid xs={12}>
                   <Input
+                  type="password"
                     placeholder="Inserisci Password"
                     variant="soft"
                     style={{

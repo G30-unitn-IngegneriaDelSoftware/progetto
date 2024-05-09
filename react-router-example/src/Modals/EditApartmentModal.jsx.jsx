@@ -32,7 +32,7 @@ function EditModal({ isOpen, onClose,id,value}) {
     axios
       .get("http://localhost:3002/apartments/"+valore+"/members")
       .then((response) => {
-        setMembri(response.data.filter((elemento)=> elemento !== Cookies["username"]));
+        setMembri(response.data);
         console.log(membri);
         console.log("membri");
         //setApartmenst(response.data);
@@ -195,21 +195,24 @@ function EditModal({ isOpen, onClose,id,value}) {
                   {/* Elemento che occupa il restante 20% dello spazio */}
                   <Grid xs={1} >
                     {/* Contenuto qui */}
-                    <IconButton
-                      aria-label="edit"
-                      style = { {color: "#142A3A", padding: "0"} }
-                      onClick={() => {
-                        console.log("dio bestia");
-                        eliminaUtente(membro);
-                      }}>
-                      <ClearIcon
-                        sx={{
-                          borderRadius: "50%",
-                          border: "1px solid white",
-                          color: "white",
-                        }}
-                      ></ClearIcon>
-                    </IconButton>
+                    {
+                      membro!==Cookies["username"] &&
+                      <IconButton
+                        aria-label="edit"
+                        style = { {color: "#142A3A", padding: "0"} }
+                        onClick={() => {
+                          console.log("dio bestia");
+                          eliminaUtente(membro);
+                        }}>
+                        <ClearIcon
+                          sx={{
+                            borderRadius: "50%",
+                            border: "1px solid white",
+                            color: "white",
+                          }}
+                        ></ClearIcon>
+                      </IconButton>
+                    }
                   </Grid>
                 </Grid>
               ))}
