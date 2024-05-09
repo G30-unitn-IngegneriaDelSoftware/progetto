@@ -195,6 +195,7 @@ export default function Register() {
               </Grid>
               <Grid xs={12}>
                 <Input
+                type="number"
                   placeholder="Cellulare"
                   variant="soft"
                   style={{
