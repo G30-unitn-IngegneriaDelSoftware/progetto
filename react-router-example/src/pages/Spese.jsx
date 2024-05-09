@@ -136,6 +136,7 @@ export default function Spese() {
   };
 
   const closeAddModal = () => {
+    setRender(!render);
     setIsAddModalOpen(false);
   };
   const closeEditModal = (index) => {
@@ -241,8 +242,9 @@ export default function Spese() {
                   <Grid width={"35%"} direction="row">
                     <Box>
                       <Typography variant="h6" fontWeight="bold">{spesa.name}</Typography>
+                      <Typography variant="subtitle2">Data: {spesa.date.slice(0, 10)}</Typography>
                       <Typography variant="subtitle2">Id: {spesa._id}</Typography>
-                      <Typography variant="subtitle1">{spesa.creditor} ha pagato {spesa.import}€</Typography>
+                      <Typography variant="subtitle2">{spesa.creditor} ha pagato {spesa.import}€</Typography>
                       <Typography variant="body2">{spesa.description}</Typography>
                     </Box>
                   </Grid>

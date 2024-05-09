@@ -91,7 +91,13 @@ function AddModal({ isOpen, onClose, value }) {
     setDescrizione(event.target.value);
   };
   const importoChange = (event) => {
-    setimporto(event.target.value);
+    let nuovoValore = event.target.value;
+    // Controlla se ci sono più di 2 cifre decimali
+    const regex = /^\d*\.?\d{0,2}$/;
+    if (!regex.test(nuovoValore)) {
+      return;
+    }
+    setimporto(nuovoValore);
   };
   const dataChange = (event) => {
     setdata(event.target.value);
