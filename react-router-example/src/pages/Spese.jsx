@@ -333,7 +333,7 @@ export default function Spese() {
                 <Typography variant="subtitle1" fontWeight={"bold"}>{obj.member}</Typography>
                 <CardContent style={{ paddingTop: "0", paddingBottom: "0"}}>
                   {obj.debitors.map((debitor, index1) => (
-                    debitor.username !== obj.member && <Typography key={index1}>{debitor.username} deve {debitor.import}€</Typography>
+                    debitor.username !== obj.member && <Typography key={index1}>{debitor.username} deve {debitor.import.toFixed(2)}€</Typography>
                   ))}
                 </CardContent>
               </Card>

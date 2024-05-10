@@ -12,6 +12,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useCookies } from "react-cookie";
+import logoImage from "../images/logo.jpg"; // Importa l'immagine
 
 export default function Appartamento() {
   const location = useLocation();
@@ -100,7 +101,9 @@ export default function Appartamento() {
               backgroundColor: "rgb(252, 252, 252)",
               borderRadius: "10%",
             }}
-          ></Grid>
+          >
+            <img src={logoImage} alt="Logo" style={{ width: "100%", height: "auto" }} /> {/* Aggiungi l'immagine qui */}
+          </Grid>
         </Grid>
         <Grid
           container

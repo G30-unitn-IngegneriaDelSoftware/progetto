@@ -7,6 +7,7 @@ import Button from "@mui/joy/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import logoImage from "../images/whitelogo.png"; // Importa l'immagine
 
 export default function Login() {
   const navigate = useNavigate();
@@ -86,6 +87,7 @@ export default function Login() {
               alignItems="center"
               xs={12}
             >
+              <img src={logoImage} alt="Logo" style={{ width: "30%", height: "auto" }} /> {/* Aggiungi l'immagine qui */}
               <Typography
                 variant="h4"
                 color="rgb(252, 252, 252)"
