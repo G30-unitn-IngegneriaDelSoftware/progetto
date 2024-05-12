@@ -9,9 +9,9 @@ export default function DateField(props){
 
     const formattedDate = `${year}-${month}-${day}`;
     return (
-        <Box style={{ width: "70%", backgroundColor: "#ACDBFF", borderLeft:"1px solid #142A3A", padding: "10px", marginBottom: "10px" }}>
+        <Box style={{ width: "95%", backgroundColor: "#ACDBFF", borderLeft:"1px solid #142A3A", padding: "15px", marginBottom: "10px" }}>
             <Typography variant="subtitle1" sx={{ fontWeight: "bold", color:"#142A3A" }}>{props.FieldName}</Typography>
-            <Input type="date" placeholder={props.placeholder} value={formattedDate || ''} style={{width:"90%"}} onChange={props.onChange}/>
+            <Input type="date" placeholder={props.placeholder} value={formattedDate || ''} style={{width:"100%"}} onChange={props.onChange}/>
         </Box>
     );
 }

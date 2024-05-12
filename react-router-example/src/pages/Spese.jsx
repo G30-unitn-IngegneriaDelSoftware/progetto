@@ -8,8 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ModeIcon from "@mui/icons-material/Mode";
-import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import EditModal from "../Modals/EditExpansesModal";
@@ -152,25 +150,6 @@ export default function Spese() {
     setIsDeleteModalOpen(updatedIsDeleteModalOpen); // Aggiorno lo stato
     setRender(!render);
   };
-
-
-  function eliminaTransazione(id_trans,event){
-    console.log("http://localhost:3002/apartments/" +
-    cookies["apartment_id"] +
-    "/expenses/"+id_trans);
-    axios
-    .delete(
-      "http://localhost:3002/apartments/" +
-        cookies["apartment_id"] +
-        "/expenses/"+id_trans
-    )
-    .then(async (response) => {
-      console.log("eliminazione fatta");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
 
   return (
     <Grid

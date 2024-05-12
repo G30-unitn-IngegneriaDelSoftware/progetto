@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/joy/Button";
 import { useNavigate, redirect, Form } from "react-router-dom";
 import axios from "axios";
+import logoImage from "../images/whitelogo.png";
 
 export default function Register() {
 
@@ -110,6 +111,7 @@ export default function Register() {
             spacing={4}
             sx={{ flexGrow: 1 }}
           >
+            <img src={logoImage} alt="Logo" style={{ width: "30%" }} /> 
             <Grid
               container
               direction="column"

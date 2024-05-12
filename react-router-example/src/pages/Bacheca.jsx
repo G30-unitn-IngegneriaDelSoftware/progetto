@@ -50,7 +50,7 @@ export default function Bacheca() {
           direction="column"
           justifyContent=""
           style={{
-            borderRadius: "5%",
+            borderRadius: "25px",
             height: "90%",
             width: "100%",
             backgroundColor: "rgb(203, 231, 253)",

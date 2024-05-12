@@ -87,7 +87,7 @@ export default function Appartamento() {
           style={{
             height: "30%",
             width: "100%",
-            //backgroundColor: "rgb(54, 135, 200)",
+            // backgroundColor: "rgb(54, 135, 200)",
           }}
         >
           <Grid
@@ -531,8 +531,7 @@ export default function Appartamento() {
       </Grid>
       <Grid
         style={{
-          height: "100%",
-          width: "80%",
+          flex: 1,
           backgroundColor: "rgb(44, 135, 50)",
         }}
       >

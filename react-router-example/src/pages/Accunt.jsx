@@ -7,6 +7,7 @@ import { Box, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import DateField from "../Components/DataField";
+import PersonIcon from '@mui/icons-material/AccountCircleRounded';
 
 
 export default function Account() {
@@ -14,6 +15,7 @@ export default function Account() {
   const navigate = useNavigate();
   const [utente, setUtente] = React.useState([]);
 
+  const [id, setId] = React.useState('');
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -51,7 +53,7 @@ export default function Account() {
   }, []);
 
   React.useEffect(() => {
-    console.log(utente);
+    setId(utente._id);
     setFirstName(utente.firstName);
     setLastName(utente.lastName);
     setBirthday(utente.birthDate);
@@ -65,6 +67,30 @@ export default function Account() {
   const birthDateChange = (event) => {setBirthday(event.target.value)};
   const emailChange = (event) => {setEmail(event.target.value)};
   const telephoneChange = (event) => {setTelephone(event.target.value)};
+
+  function updateUser(){
+    axios.patch("http://localhost:3002/users/" + id, {
+      firstName: firstName,
+      lastName: lastName,
+      telephone: telephone,
+      birthDate: birthday,
+      email: email
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  function deleteUser(){
+    axios.delete("http://localhost:3002/users/" + id)
+    .then(
+      navigate("/", {replace: true})
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
 
   return (
     <Grid
@@ -86,7 +112,7 @@ export default function Account() {
         style={{
           height: "90%",
           width: "80%",
-          //backgroundColor: "rgb(203, 231, 253)",
+          // backgroundColor: "rgb(203, 231, 253)",
         }}
       >
         <Grid
@@ -119,17 +145,25 @@ export default function Account() {
             backgroundColor: "rgb(203, 231, 253)",
           }}
         >
-          <Box>
-            <Field FieldName="Nome" placeholder="Nome" value={firstName} />
-            <Field FieldName="Cognome" placeholder="Cognome" value={lastName} onChange={lastNameChange} />
-            <DateField FieldName="Data di nascita" placeholder="Data di nascita" value={birthday} onChange={birthDateChange} />
-            <Field FieldName="Email" placeholder="Email" value={email} onChange={emailChange} />
-            <Field FieldName="Telefono" placeholder="Telefono" value={telephone} onChange={telephoneChange} />
+          <Grid container direction="row" style={{ width: "100%"}}>
+            <Box sx={{ flex: 1}}>
+              <Field FieldName="Nome" placeholder="Nome" value={firstName} onChange={firstNameChange} />
+              <Field FieldName="Cognome" placeholder="Cognome" value={lastName} onChange={lastNameChange} />
+              <DateField FieldName="Data di nascita" placeholder="Data di nascita" value={birthday} onChange={birthDateChange} />
+              <Field FieldName="Email" placeholder="Email" value={email} onChange={emailChange} />
+              <Field FieldName="Telefono" placeholder="Telefono" value={telephone} onChange={telephoneChange} />
+            </Box>
+            <Box style={{ width: "200px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <PersonIcon sx={{ fontSize: 180, color: "#142A3A" }} />
+              <Typography variant="subtitle1" color="#142A3A">{username}</Typography>
+            </Box>
+          </Grid>
+          <Box sx={{ flex: 1, display: "flex", alignItems: "flex-end"}}>
+            <Stack spacing={1} direction="row">
+              <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}} onClick={updateUser}>Salva dati</Button>
+              <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}} onClick={deleteUser}>Elimina account</Button>
+            </Stack>
           </Box>
-          <Stack spacing={1} direction="row">
-            <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}}>Salva dati</Button>
-            <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}}>Elimina account</Button>
-          </Stack>
         </Grid>
       </Grid>
     </Grid>

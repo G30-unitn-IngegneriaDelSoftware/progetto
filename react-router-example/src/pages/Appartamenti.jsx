@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import HomeIcon from "@mui/icons-material/Home";
+import HomeIcon from "@mui/icons-material/HomeRounded";
 import ShareIcon from "@mui/icons-material/Share";
 import ModeIcon from "@mui/icons-material/Mode";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -20,7 +20,7 @@ import DeleteModal from "../Modals/DeleteApartmentModal";
 import EditModal from "../Modals/EditApartmentModal.jsx";
 import axios from "axios";
 import { Cookies, useCookies } from "react-cookie";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 //axios.defaults.withCredentials = true;
 async function creaAppartamento() {
   axios
@@ -228,7 +228,7 @@ export default function Appartamenti() {
                           width: "100%",
                           backgroundColor: "rgb(172, 219, 255)",
                           marginTop:"10px",
-                          borderRadius: "3%",
+                          borderRadius: "1rem",
                         }}
                       >
                         <Grid
@@ -238,7 +238,7 @@ export default function Appartamenti() {
                           style={{
                             height: "100%",
                             width: "100%",
-                            //backgroundColor: "rgb(13, 231, 93)",
+                            // backgroundColor: "rgb(13, 231, 93)",
                           }}
                         >
                           <Grid 
@@ -249,172 +249,160 @@ export default function Appartamenti() {
                               //backgroundColor: "rgb(72, 19, 155)",
                             }}>
 
-                          <Grid
-                            container
-                            direction="row"
-                            style={{
-                              height: "100%",
-                              width: "100%",
-                              //backgroundColor: "rgb(13, 231, 93)",
-                            }}
-                          >
-                            <ButtonBase
-                              style={{
-                                height: "100%",
-                                width: "80%",
-                                //backgroundColor: "rgb(72, 19, 155)",
-                              }}
-                              onClick={async () => {
-                                console.log("apartment._id");
-                                console.log(apartment._id);
-                                setCookie("apartment_id", apartment._id);
-                                navigate("/appartamento");
-                              }}>
                             <Grid
                               container
+                              direction="row"
                               style={{
                                 height: "100%",
-                                width: "30%",
-                                //backgroundColor: "rgb(83, 51, 33)",
+                                width: "100%",
+                                // backgroundColor: "rgb(13, 231, 93)",
                               }}
                             >
-                              <Grid
-                                sx={{
+                              <ButtonBase
+                                style={{
                                   height: "100%",
                                   width: "80%",
-                                  borderRadius: "50%",
-                                  border: "1px solid black",
+                                  // backgroundColor: "rgb(72, 19, 155)",
                                 }}
-                              />
-                            </Grid>
-                            <Grid
-                              container
-                              style={{
-                                height: "100%",
-                                width: "2%",
-                                //backgroundColor: "rgb(83, 91, 153)",
-                              }}
-                            ></Grid>
-
-                            <Grid
-                              container
-                              direction="column"
-                              justifyContent="flex-start"
-                              style={{
-                                height: "100%",
-                                width: "68%",
-                                //backgroundColor: "rgb(133, 191, 153)",
-                              }}
-                            >
-                              <Typography
-                                style={{
-                                  height: "70%",
-                                  width: "100%",
-                                  //backgroundColor: "rgb(83, 71, 153)",
-                                  fontSize: "200%",
-                                }}
-                              >
-                                {apartment.name}
-                              </Typography>
-                              <Typography
-                                style={{
-                                  height: "30%",
-                                  width: "100%",
-                                  //backgroundColor: "rgb(13, 11, 153)",
-                                }}
-                              >
-                                Codice:{apartment._id}
-                              </Typography>
-                            </Grid>
-                            </ButtonBase>
-
-
-                            <Grid
-                              container
-                              direction="column"
-                              style={{
-                                height: "100%",
-                                width: "20%",
-                                //backgroundColor: "rgb(103, 11, 153)",
-                              }}
-                            >
+                                onClick={async () => {
+                                  console.log("apartment._id");
+                                  console.log(apartment._id);
+                                  setCookie("apartment_id", apartment._id);
+                                  navigate("/appartamento");
+                                }}>
+                                  
+                                <Grid
+                                  container
+                                  style={{
+                                    height: "100%",
+                                    width: "30%",
+                                    justifyContent: "center",
+                                    // backgroundColor: "rgb(83, 51, 33)",
+                                  }}
+                                >
+                                  <Box>
+                                    <HomeIcon sx={{ fontSize: 100, color: "#142A3A" }} />
+                                  </Box>
+                                </Grid>
 
                               <Grid
                                 container
-                                justifyContent="flex-end"
+                                direction="column"
+                                justifyContent="flex-start"
                                 style={{
-                                  height: "40%",
-                                  width: "100%",
-                                  //backgroundColor: "rgb(43, 111, 113)",
+                                  height: "100%",
+                                  width: "68%",
+                                  //backgroundColor: "rgb(133, 191, 153)",
                                 }}
                               >
-                                <EditModal
-                                  isOpen={isEditModalOpen[index]}
-                                  onClose={() => closeEditModal(index)}
-                                  id={apartment._id}
-                                  value={{nome:apartment.name,descrizione:apartment.description}}
-                                />
-                                {/*verifico che l'utente sia admin per vedere il puslante di modicaS*/}
-                                {apartment.admin===cookies["username"] &&
-                                  <IconButton
-                                    aria-label="edit"
-                                    style = { {color: "#142A3A", padding: "0"} }
-                                    onClick={() => {
-                                      openEditModal(index);
-                                    }}>
-                                    <ModeIcon
-                                      sx={{
-                                        borderRadius: "50%",
-                                        border: "1px solid black",
-                                        //backgroundColor: "rgb(43, 111, 113)",
-                                      }}
-                                    ></ModeIcon>
-                                  </IconButton>
-                                }
-                                <DeleteModal
-                                  isOpen={isDeleteModalOpen[index]}
-                                  onClose={() => closeDeleteModal(index)}
-                                  value={apartment._id}
-                                />
-                                {apartment.admin===cookies["username"] &&
-                                  <IconButton
-                                    aria-label="edit"
-                                    style = { {color: "#142A3A", padding: "0"} }
-                                    onClick={() => {
-                                      openDeleteModal(index);
-                                    }}>
-                                    <ClearIcon
-                                      sx={{
-                                        borderRadius: "50%",
-                                        border: "1px solid black",
-                                        //backgroundColor: "rgb(43, 111, 113)",
-                                      }}
-                                    ></ClearIcon>
-                                  </IconButton>
-                                }
+                                <Typography
+                                  style={{
+                                    height: "70%",
+                                    width: "100%",
+                                    //backgroundColor: "rgb(83, 71, 153)",
+                                    fontSize: "200%",
+                                  }}
+                                >
+                                  {apartment.name}
+                                </Typography>
+                                <Typography
+                                  style={{
+                                    height: "30%",
+                                    width: "100%",
+                                    //backgroundColor: "rgb(13, 11, 153)",
+                                  }}
+                                >
+                                  Codice:{apartment._id}
+                                </Typography>
                               </Grid>
-                              <ButtonBase                            
-                              style={{
-                                height: "60%",
-                                width: "100%",
-                                //backgroundColor: "rgb(72, 19, 155)",
-                              }}
-                              onClick={async () => {
-                                console.log("apartment._id");
-                                console.log(apartment._id);
-                                setCookie("apartment_id", apartment._id);
-                                navigate("/appartamento");
-                              }}>
+                              </ButtonBase>
 
-                            </ButtonBase>
+
+                              <Grid
+                                container
+                                direction="column"
+                                style={{
+                                  height: "100%",
+                                  width: "20%",
+                                  //backgroundColor: "rgb(103, 11, 153)",
+                                }}
+                              >
+
+                                <Grid
+                                  container
+                                  justifyContent="flex-end"
+                                  style={{
+                                    height: "40%",
+                                    width: "100%",
+                                    //backgroundColor: "rgb(43, 111, 113)",
+                                  }}
+                                >
+                                  <EditModal
+                                    isOpen={isEditModalOpen[index]}
+                                    onClose={() => closeEditModal(index)}
+                                    id={apartment._id}
+                                    value={{nome:apartment.name,descrizione:apartment.description}}
+                                  />
+                                  {/*verifico che l'utente sia admin per vedere il puslante di modicaS*/}
+                                  {apartment.admin===cookies["username"] &&
+                                    <IconButton
+                                      aria-label="edit"
+                                      style = { {color: "#142A3A", padding: "0"} }
+                                      onClick={() => {
+                                        openEditModal(index);
+                                      }}>
+                                      <ModeIcon
+                                        sx={{
+                                          borderRadius: "50%",
+                                          border: "1px solid black",
+                                          //backgroundColor: "rgb(43, 111, 113)",
+                                        }}
+                                      ></ModeIcon>
+                                    </IconButton>
+                                  }
+                                  <DeleteModal
+                                    isOpen={isDeleteModalOpen[index]}
+                                    onClose={() => closeDeleteModal(index)}
+                                    value={apartment._id}
+                                  />
+                                  {apartment.admin===cookies["username"] &&
+                                    <IconButton
+                                      aria-label="edit"
+                                      style = { {color: "#142A3A", padding: "0"} }
+                                      onClick={() => {
+                                        openDeleteModal(index);
+                                      }}>
+                                      <ClearIcon
+                                        sx={{
+                                          borderRadius: "50%",
+                                          border: "1px solid black",
+                                          //backgroundColor: "rgb(43, 111, 113)",
+                                        }}
+                                      ></ClearIcon>
+                                    </IconButton>
+                                  }
+                                </Grid>
+                                <ButtonBase                            
+                                style={{
+                                  height: "60%",
+                                  width: "100%",
+                                  //backgroundColor: "rgb(72, 19, 155)",
+                                }}
+                                onClick={async () => {
+                                  console.log("apartment._id");
+                                  console.log(apartment._id);
+                                  setCookie("apartment_id", apartment._id);
+                                  navigate("/appartamento");
+                                }}>
+
+                              </ButtonBase>
+                              </Grid>
+
+
                             </Grid>
-
-
                           </Grid>
-                          </Grid>
-
-
-
+                          
+                          <Divider flexItem/>
 
                           <ButtonBase 
                             style={{
@@ -431,7 +419,7 @@ export default function Appartamenti() {
                             <Grid
                               container
                               style={{
-                                height: "100%",
+                                height: "85%",
                                 width: "100%",
                                 //backgroundColor: "rgb(3, 231, 153)",
                               }}
@@ -462,12 +450,13 @@ export default function Appartamenti() {
                                 <Divider
                                   orientation="vertical"
                                   flexItem
-                                ></Divider>
+                                />
                                 <Grid
                                   container
                                   direction="column"
                                   alignItems="center"
                                   style={{
+                                    padding: "10px",
                                     height: "100%",
                                     width: "50%",
                                     //backgroundColor: "rgb(33, 131, 117)",
