@@ -48,14 +48,17 @@ export default function Calendario() {
         <Grid
           container
           direction="column"
-          justifyContent=""
+          justifyContent="center" // Centra verticalmente
+          alignItems="center" // Centra orizzontalmente
           style={{
             borderRadius: "25px",
             height: "90%",
             width: "100%",
             backgroundColor: "rgb(203, 231, 253)",
           }}
-        ></Grid>
+        >
+          <Typography variant="h1" align="center" color="rgb(0, 76, 134)">Work in progress...</Typography> 
+        </Grid>
       </Grid>
     </Grid>
   );

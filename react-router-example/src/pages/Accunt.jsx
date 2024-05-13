@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import DateField from "../Components/DataField";
 import PersonIcon from '@mui/icons-material/AccountCircleRounded';
+import DeleteModal from "../Modals/DeleteAccountModal";
 
 
 export default function Account() {
@@ -22,6 +23,15 @@ export default function Account() {
   const [birthday, setBirthday] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [telephone, setTelephone] = React.useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true); // Aggiorno lo stato
+  };
+
+  const closeDeleteModal = (index) => {
+    setIsDeleteModalOpen(false); // Aggiorno lo stato
+  };
 
   React.useEffect(() => {
     let sessioneTrovata = false;
@@ -81,17 +91,6 @@ export default function Account() {
     });
   }
 
-  function deleteUser(){
-    axios.delete("http://localhost:3002/users/" + id)
-    .then(
-      navigate("/", {replace: true})
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-
-  }
-
   return (
     <Grid
       container
@@ -145,6 +144,11 @@ export default function Account() {
             backgroundColor: "rgb(203, 231, 253)",
           }}
         >
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => closeDeleteModal()}
+          value={id}
+        />
           <Grid container direction="row" style={{ width: "100%"}}>
             <Box sx={{ flex: 1}}>
               <Field FieldName="Nome" placeholder="Nome" value={firstName} onChange={firstNameChange} />
@@ -161,7 +165,7 @@ export default function Account() {
           <Box sx={{ flex: 1, display: "flex", alignItems: "flex-end"}}>
             <Stack spacing={1} direction="row">
               <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}} onClick={updateUser}>Salva dati</Button>
-              <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}} onClick={deleteUser}>Elimina account</Button>
+              <Button variant="outlined" style={{ color:"#142A3A", borderColor: "#142A3A"}} onClick={openDeleteModal}>Elimina account</Button>
             </Stack>
           </Box>
         </Grid>

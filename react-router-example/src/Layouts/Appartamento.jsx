@@ -173,6 +173,9 @@ export default function Appartamento() {
               width: "60%",
               //backgroundColor: "rgb(94, 175, 70)",
               marginTop: "3%",
+              opacity: 0.5, // Riduci l'opacità se booleanArray[2] è falso
+              cursor:  "default", // Cambia il cursore se booleanArray[2] è falso
+              pointerEvents: "auto", // Assicura che il pulsante sia sempre cliccabile
             }}
             onClick={() => navigate("/appartamento")}
           >
@@ -225,6 +228,9 @@ export default function Appartamento() {
               width: "60%",
               //backgroundColor: "rgb(94, 175, 70)",
               marginTop: "3%",
+              opacity: 0.5, // Riduci l'opacità se booleanArray[2] è falso
+              cursor:  "default", // Cambia il cursore se booleanArray[2] è falso
+              pointerEvents: "auto", // Assicura che il pulsante sia sempre cliccabile
             }}
             onClick={() => navigate("/appartamento/bacheca")}
           >
@@ -277,6 +283,9 @@ export default function Appartamento() {
               width: "60%",
               //backgroundColor: "rgb(94, 175, 70)",
               marginTop: "3%",
+              opacity: 0.5, // Riduci l'opacità se booleanArray[2] è falso
+              cursor:  "default", // Cambia il cursore se booleanArray[2] è falso
+              pointerEvents: "auto", // Assicura che il pulsante sia sempre cliccabile
             }}
             onClick={() => navigate("/appartamento/turni")}
           >
@@ -381,6 +390,9 @@ export default function Appartamento() {
               width: "60%",
               //backgroundColor: "rgb(94, 175, 70)",
               marginTop: "3%",
+              opacity: 0.5, // Riduci l'opacità se booleanArray[2] è falso
+              cursor:  "default", // Cambia il cursore se booleanArray[2] è falso
+              pointerEvents: "auto", // Assicura che il pulsante sia sempre cliccabile
             }}
             onClick={() => navigate("/appartamento/calendario")}
           >
@@ -433,6 +445,9 @@ export default function Appartamento() {
               width: "60%",
               //backgroundColor: "rgb(94, 175, 70)",
               marginTop: "3%",
+              opacity: 0.5, // Riduci l'opacità se booleanArray[2] è falso
+              cursor:  "default", // Cambia il cursore se booleanArray[2] è falso
+              pointerEvents: "auto", // Assicura che il pulsante sia sempre cliccabile
             }}
             onClick={() => navigate("/appartamento/todo")}
           >
